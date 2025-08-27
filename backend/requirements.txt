@@ -1,0 +1,15 @@
+# Google Cloud Services
+google-cloud-aiplatform
+google-cloud-speech
+google-cloud-storage
+google-cloud-vision
+# Serverless Framework for Google Cloud Functions
+functions-framework
+Flask
+Flask-Cors
+# Audio Processing for Feature #3
+pydub
+# For loading our secret keys in local development
+python-dotenv
+# For detecting file types
+filetype
