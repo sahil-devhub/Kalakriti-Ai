@@ -1,4 +1,5 @@
-echo 'module.exports = {
+// tailwind.config.js
+module.exports = {
     content: [
       "./src/**/*.{js,jsx,ts,tsx}",
     ],
@@ -6,4 +7,4 @@ echo 'module.exports = {
       extend: {},
     },
     plugins: [],
-  };' > tailwind.config.js
+  };

@@ -1,10 +1,12 @@
-import { useCallback } from 'react';
+// src/App.js
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Particles from '@tsparticles/react';
 import { loadSlim } from '@tsparticles/slim';
 import axios from 'axios';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 
-const API_BASE_URL = 'http://localhost:8080'; // Adjust to your backend URL, e.g., Google Cloud Function URL or local
+const API_BASE_URL = 'http://localhost:8080'; // Adjust to your backend URL (local or deployed)
 
 function App() {
   const [imageFile, setImageFile] = useState(null);
@@ -19,7 +21,7 @@ function App() {
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
-  
+
   const particlesOptions = {
     background: {
       color: {
