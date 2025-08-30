@@ -1,67 +1,260 @@
-- **src/index.css**:
-```powershell
-Set-Content -Path "D:\my project\kalakriti-ai\frontend\src\index.css" -Value @'
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* --- index.css --- */
+
+/* Font Import (Already in App.css, but good practice to keep consistent) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&display=swap');
 
 body {
-margin: 0;
-font-family: 'Poppins', sans-serif;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0A0A1A;
+  color: #CCCCCC;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+/* Main Content Container */
+.content-container {
+  max-width: 800px;
+  width: 100%;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.content-container.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Logo and Tagline */
+.logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #00FFFF;
+  text-align: center;
+  text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF, 0 0 30px #00FFFF;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2rem;
+  color: #CCCCCC;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(40, end) forwards;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Upload Cards */
+.upload-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.upload-card {
+  background-color: #1E1E2E;
+  border: 2px solid transparent;
+  border-image: linear-gradient(45deg, #FF00FF, #00FFFF);
+  border-image-slice: 1;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.2);
+}
+
+.upload-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.upload-icon {
+  font-size: 1.5rem;
+}
+
+.upload-card:nth-child(1) .upload-icon {
+  color: #00FFFF;
+}
+
+.upload-card:nth-child(2) .upload-icon {
+  color: #FF00FF;
+}
+
+/* Custom File Upload Button */
+.custom-file-upload {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background-color: #33334F;
+  color: #FFFFFF;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  width: fit-content;
+}
+
+.custom-file-upload:hover {
+  background-color: #44446F;
+  transform: scale(1.05);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #999999;
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
+.check-icon {
+  color: #4CAF50;
+  animation: slide-in 0.5s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Create Button */
+.create-button {
+  display: block; /* Added to make it a block-level element */
+  width: 100%;
+  max-width: 300px;
+  margin: 2rem auto 0 auto; /* Centered using margin */
+  padding: 1rem;
+  border-radius: 50px;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(45deg, #FF00FF, #00FFFF);
+  cursor: pointer;
+  box-shadow: 0 0 5px #FF00FF, 0 0 10px #00FFFF;
+  transition: transform 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  animation: pulse-glow 1.5s infinite ease-in-out;
+}
+
+.create-button:hover {
+  transform: scale(1.05);
+}
+
+.create-button:active {
+  transform: scale(0.95);
 }
 
 @keyframes pulse-glow {
-0% {
-  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-}
-50% {
-  box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-}
-100% {
-  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-}
-}
-
-.animate-pulse-glow {
-animation: pulse-glow 1.5s infinite;
+  0% {
+    box-shadow: 0 0 5px #FF00FF, 0 0 10px #00FFFF;
+  }
+  50% {
+    box-shadow: 0 0 15px #FF00FF, 0 0 30px #00FFFF;
+  }
+  100% {
+    box-shadow: 0 0 5px #FF00FF, 0 0 10px #00FFFF;
+  }
 }
 
-@keyframes shake {
-0% { transform: translateX(0); }
-10% { transform: translateX(-10px); }
-20% { transform: translateX(10px); }
-30% { transform: translateX(-10px); }
-40% { transform: translateX(10px); }
-50% { transform: translateX(0); }
+.create-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  animation: none;
 }
 
-.animate-shake {
-animation: shake 0.5s;
+.spinner {
+  animation: spin 1.5s linear infinite;
 }
 
-@font-face {
-font-family: 'Material Icons';
-font-style: normal;
-font-weight: 400;
-src: ur[](https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.material-icons {
-font-family: 'Material Icons';
-font-weight: normal;
-font-style: normal;
-font-size: 24px;
-line-height: 1;
-letter-spacing: normal;
-text-transform: none;
-display: inline-block;
-white-space: nowrap;
-word-wrap: normal;
-direction: ltr;
--webkit-font-feature-settings: 'liga';
-font-feature-settings: 'liga';
--webkit-font-smoothing: antialiased;
+/* Result and Error States */
+.result-container {
+  background-color: #1E1E2E;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+  width: 100%;
 }
-'@ -Encoding UTF8
+
+.result-container h2, .result-container h3 {
+  color: #00FFFF;
+  margin-top: 0;
+}
+
+.error-message {
+  color: #FF0000;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .logo {
+    font-size: 2.5rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+
+  .upload-card {
+    padding: 1rem;
+  }
+
+  .create-button {
+    font-size: 1rem;
+    padding: 0.75rem;
+  }
+}

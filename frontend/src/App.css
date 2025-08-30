@@ -1,38 +1,110 @@
-.App {
-  text-align: center;
+/* --- App.css --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0A0A1A;
+  color: #CCCCCC;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  min-height: 100vh;
+  padding: 2rem 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-.App-link {
-  color: #61dafb;
+/* Background Particle Animation */
+.background-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FF00FF 0%, #00FFFF 100%);
+  opacity: 0.2;
+  animation: float-and-pulse 20s infinite ease-in-out;
+}
+
+/* Specific particle sizes and positions to create a scattered effect */
+.particle:nth-child(1) {
+  width: 50px;
+  height: 50px;
+  top: 10%;
+  left: 15%;
+  animation-duration: 25s;
+}
+
+.particle:nth-child(2) {
+  width: 80px;
+  height: 80px;
+  top: 80%;
+  left: 70%;
+  animation-duration: 18s;
+  animation-delay: 2s;
+}
+
+.particle:nth-child(3) {
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 40%;
+  animation-duration: 22s;
+  animation-delay: 4s;
+}
+
+.particle:nth-child(4) {
+  width: 40px;
+  height: 40px;
+  top: 30%;
+  left: 85%;
+  animation-duration: 20s;
+  animation-delay: 6s;
+}
+
+.particle:nth-child(5) {
+  width: 70px;
+  height: 70px;
+  top: 5%;
+  left: 55%;
+  animation-duration: 28s;
+  animation-delay: 8s;
+}
+
+.particle:nth-child(6) {
+  width: 90px;
+  height: 90px;
+  top: 60%;
+  left: 5%;
+  animation-duration: 19s;
+  animation-delay: 10s;
+}
+
+@keyframes float-and-pulse {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    transform: translateY(-50px) scale(1.1);
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.2;
   }
 }
