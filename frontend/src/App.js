@@ -25,7 +25,8 @@ function App() {
 
   const handleSubmit = async () => {
     if (!artFile || !storyFile) {
-      alert('Please upload both your art and story files.');
+      // Use a custom message box instead of alert()
+      setResponse({ error: 'Please upload both your art and story files.' });
       return;
     }
 
@@ -35,20 +36,26 @@ function App() {
     formData.append('audio', storyFile);
 
     try {
-      const response = await fetch('http://localhost:5001/kalakriti-ai/us-central1/api/generate-marketing-kit', {
+      const apiResponse = await fetch('http://127.0.0.1:8080/generate-marketing-kit', {
         method: 'POST',
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (!apiResponse.ok) {
+        // Log the status and throw a specific error
+        console.error(`HTTP Error: ${apiResponse.status} - ${apiResponse.statusText}`);
+        throw new Error(`HTTP error! status: ${apiResponse.status}`);
       }
 
-      const result = await response.json();
+      const result = await apiResponse.json();
       setResponse(result);
     } catch (error) {
       console.error("Error generating marketing kit:", error);
-      setResponse({ error: 'Failed to generate kit. Please try again.' });
+      if (error instanceof TypeError && error.message === 'Failed to fetch') {
+        setResponse({ error: 'Failed to connect to the backend. Is the server running?' });
+      } else {
+        setResponse({ error: `An error occurred: ${error.message}` });
+      }
     } finally {
       setIsLoading(false);
     }
