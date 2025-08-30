@@ -1,4 +1,4 @@
-# --- FINAL DEBUG-READY VERSION ---
+# --- RUN COMMMAND: functions-framework --target=api
 import os
 import json
 import re
