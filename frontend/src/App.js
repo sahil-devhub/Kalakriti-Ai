@@ -36,7 +36,9 @@ function App() {
     formData.append('audio', storyFile);
 
     try {
-      const apiResponse = await fetch('http://127.0.0.1:8080/generate-marketing-kit', {
+      // *** CRITICAL MONOLITH CHANGE: Using relative path /api/... ***
+      // This ensures the API call goes back to the Flask server (port 5000).
+      const apiResponse = await fetch('/api/generate-marketing-kit',{ 
         method: 'POST',
         body: formData,
       });
@@ -54,7 +56,9 @@ function App() {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {
         setResponse({ error: 'Failed to connect to the backend. Is the server running?' });
       } else {
-        setResponse({ error: `An error occurred: ${error.message}` });
+        // If the error message is too long, we display a concise version
+        const message = error.message.length > 80 ? 'An unknown error occurred during processing.' : error.message;
+        setResponse({ error: `Processing error: ${message}` });
       }
     } finally {
       setIsLoading(false);
@@ -69,12 +73,21 @@ function App() {
       return (
         <div className="result-container">
           <h2>Your Marketing Kit</h2>
+          
           <h3>Product Title:</h3>
           <p>{response.productTitle}</p>
+          
           <h3>Product Description:</h3>
           <p>{response.productDescription}</p>
-          <h3>Social Media Caption:</h3>
-          <p>{response.socialMediaCaption}</p>
+          
+          {/* Main Post Description (the short, engaging text) */}
+          <h3>Main Post Description:</h3>
+          <p>{response.postHashtags || "No description generated."}</p>
+          
+          {/* Post Hashtags (the hash-only string) */}
+          <h3>Post Hashtags (Copy/Paste):</h3>
+          <p className="font-mono text-sm break-all text-pink-300">{response.socialMediaCaption || "No hashtags generated."}</p> 
+          
           <h3>Artisan Story:</h3>
           <p>{response.artisanStory}</p>
         </div>

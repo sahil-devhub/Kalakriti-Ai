@@ -1,8 +1,11 @@
 # Google Cloud Services
 google-cloud-aiplatform
 google-cloud-speech
+google-generativeai
 google-cloud-storage
 google-cloud-vision
+pydub
+gunicorn
 # Serverless Framework for Google Cloud Functions
 functions-framework
 Flask
