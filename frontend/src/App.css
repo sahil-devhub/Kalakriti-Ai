@@ -1,34 +1,52 @@
-/* --- App.css --- */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600;700&display=swap');
+/* --- Kalakriti AI: Complete Unified Stylesheet --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
+/* --- 1. Base & Body Styles --- */
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0A0A1A;
-  color: #CCCCCC;
+  background-color: #0A0A1A; /* Deep Space Blue */
+  color: #E0E7FF; /* Light Lavender White */
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Changed from center to flex-start */
+  justify-content: center; /* Center content vertically */
   min-height: 100vh;
-  padding: 2rem 2rem;
+  padding: 2rem;
   position: relative;
+  overflow: hidden; /* Hide overflowing particles */
   z-index: 1;
 }
 
-/* Background Particle Animation */
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.content-container.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* --- 2. Background Particle Animation (Your Existing Code) --- */
 .background-particles {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   z-index: 0;
 }
 
@@ -40,71 +58,268 @@ body {
   animation: float-and-pulse 20s infinite ease-in-out;
 }
 
-/* Specific particle sizes and positions to create a scattered effect */
-.particle:nth-child(1) {
-  width: 50px;
-  height: 50px;
-  top: 10%;
-  left: 15%;
-  animation-duration: 25s;
-}
-
-.particle:nth-child(2) {
-  width: 80px;
-  height: 80px;
-  top: 80%;
-  left: 70%;
-  animation-duration: 18s;
-  animation-delay: 2s;
-}
-
-.particle:nth-child(3) {
-  width: 60px;
-  height: 60px;
-  top: 50%;
-  left: 40%;
-  animation-duration: 22s;
-  animation-delay: 4s;
-}
-
-.particle:nth-child(4) {
-  width: 40px;
-  height: 40px;
-  top: 30%;
-  left: 85%;
-  animation-duration: 20s;
-  animation-delay: 6s;
-}
-
-.particle:nth-child(5) {
-  width: 70px;
-  height: 70px;
-  top: 5%;
-  left: 55%;
-  animation-duration: 28s;
-  animation-delay: 8s;
-}
-
-.particle:nth-child(6) {
-  width: 90px;
-  height: 90px;
-  top: 60%;
-  left: 5%;
-  animation-duration: 19s;
-  animation-delay: 10s;
-}
+.particle:nth-child(1) { width: 50px; height: 50px; top: 10%; left: 15%; animation-duration: 25s; }
+.particle:nth-child(2) { width: 80px; height: 80px; top: 80%; left: 70%; animation-duration: 18s; animation-delay: 2s; }
+.particle:nth-child(3) { width: 60px; height: 60px; top: 50%; left: 40%; animation-duration: 22s; animation-delay: 4s; }
+.particle:nth-child(4) { width: 40px; height: 40px; top: 30%; left: 85%; animation-duration: 20s; animation-delay: 6s; }
+.particle:nth-child(5) { width: 70px; height: 70px; top: 5%; left: 55%; animation-duration: 28s; animation-delay: 8s; }
+.particle:nth-child(6) { width: 90px; height: 90px; top: 60%; left: 5%; animation-duration: 19s; animation-delay: 10s; }
 
 @keyframes float-and-pulse {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translateY(-50px) scale(1.1);
-    opacity: 0.4;
-  }
-  100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.2;
-  }
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+  50% { transform: translateY(-50px) scale(1.1); opacity: 0.4; }
 }
+
+
+/* --- 3. Common Styles (Logo, Buttons, etc.) --- */
+.logo {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px #fff, 0 0 20px #00ffff, 0 0 30px #ff00ff;
+  margin-bottom: 0.5rem;
+}
+
+.tagline {
+  font-size: 1.1rem;
+  color: #a5b4fc; /* Lavender */
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.create-button {
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.create-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.7);
+}
+
+.create-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-message {
+  color: #f87171; /* Red */
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  padding: 0.8rem;
+  border-radius: 10px;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 450px;
+  box-sizing: border-box;
+}
+
+/* --- 4. Navigation Styles --- */
+.main-nav {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  z-index: 100;
+}
+
+.nav-link {
+  color: #c4b5fd;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #fff;
+  text-shadow: 0 0 10px #ff00ff;
+}
+
+
+/* --- 5. Signup Page Styles --- */
+.auth-card {
+  background-color: rgba(18, 18, 38, 0.5);
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(128, 90, 213, 0.4);
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.3), 0 0 20px rgba(139, 92, 246, 0.2);
+  max-width: 450px;
+  width: 100%;
+  text-align: center;
+}
+
+.auth-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #c4b5fd; /* Light purple */
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #8b5cf6; /* Main purple */
+}
+
+.auth-input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #1e1b4b; /* Dark indigo */
+  border: 1px solid #4f46e5; /* Indigo border */
+  border-radius: 10px;
+  padding: 0.8rem 0.8rem 0.8rem 2.5rem;
+  color: #e0e7ff;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.auth-input::placeholder { color: #a5b4fc; }
+
+.auth-input:focus {
+  outline: none;
+  border-color: #ec4899; /* Pink focus */
+  box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+}
+
+.success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: rgba(18, 18, 38, 0.5);
+  padding: 3rem;
+  border-radius: 20px;
+  border: 1px solid #34d399; /* Green border */
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+  max-width: 450px;
+}
+
+.success-icon {
+  font-size: 4rem;
+  color: #34d399;
+}
+
+
+/* --- 6. Home Page Styles --- */
+.upload-section {
+  display: flex;
+  gap: 2rem;
+  width: 100%;
+  max-width: 900px;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.upload-card {
+  background-color: rgba(18, 18, 38, 0.5);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(128, 90, 213, 0.4);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.upload-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ddd6fe;
+}
+
+.upload-icon {
+  font-size: 1.5rem;
+  color: #a5b4fc;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #6366f1;
+}
+
+.file-name {
+  color: #a5b4fc;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.check-icon {
+  color: #34d399;
+}
+
+.result-container {
+  margin-top: 2rem;
+  background-color: rgba(18, 18, 38, 0.5);
+  padding: 2rem;
+  border-radius: 20px;
+  border: 1px solid rgba(128, 90, 213, 0.4);
+  width: 100%;
+  max-width: 900px;
+  text-align: left;
+}
+

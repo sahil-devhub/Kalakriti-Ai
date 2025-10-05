@@ -50,26 +50,25 @@ def generate_text_for_art(image_content: bytes, audio_content: bytes) -> str:
     image_part = Part.from_bytes(data=image_content, mime_type="image/jpeg")
 
     # --- FINAL REFINED PROMPT FOR SIMPLE LANGUAGE, SHORT DESCRIPTION, AND MAX VISIBILITY ---
+    # --- [NEW SIMPLIFIED AND CORRECTED PROMPT] ---
     text_prompt = f"""
-    You are an expert social media strategist and copywriter for artisanal crafts. 
-    Your goal is to create a complete marketing kit from the attached image of a product and the artisan's story.
-    
+    You are an expert social media strategist for artisanal crafts. Your goal is to create a marketing kit from the attached product image and the artisan's story.
+
     **Artisan's Story Transcript:**
     "{artisan_story_transcript}"
 
     **Crucial Instructions:**
-    1. **Product Description:** The description MUST be concise (max 3-4 sentences), highly persuasive, and written in **simple words, and easy-to-understand language** (avoid complex or flowery vocabulary). Focus on customer benefits and emotional connection for a direct sales page.
-    2. **Social Media Caption (Hashtags):** This field MUST contain ONLY a continuous string of 10 to 15 highly effective, trending, and relevant hashtags. These hashtags must be optimized for maximum reach and target buyers interested in culture, craft, and aesthetics to ensure the startup's growth. NO descriptive text or emojis.
-    3. **Content Swap:** The content for the primary post description should be placed in the "postHashtags" field.
+    1.  **Language:** Use simple, easy-to-understand language.
+    2.  **Conciseness:** Keep all descriptions short and persuasive.
+    3.  **JSON Structure:** Respond ONLY with a valid JSON object using the exact keys specified below. Do not add ```json markdown.
 
-    **Your Response:**
-    Respond ONLY with a valid JSON object with the following structure, without any additional formatting (e.g., no ```json):
+    **Your Response JSON Structure:**
     {{
       "productTitle": "A concise, SEO-friendly title (5-8 words).",
-      "productDescription": "A concise, persuasive description (3-4 sentences maximum) using simple language.",
-      "socialMediaCaption": "#HighImpactHashtag1 #HighImpactHashtag2 #HighImpactHashtag3 #... (10 to 15 total)",
-      "postHashtags": "An engaging, short description (2-3 sentences) suitable for the main post body, including emojis.",
-      "artisanStory": "A short, narrative paragraph about the artisan's craft."
+      "productDescription": "A persuasive product description for a sales page (3-4 sentences max).",
+      "mainPostDescription": "An engaging social media caption for the main post body, can include emojis (2-3 sentences).",
+      "hashtags": "A single string containing 10-15 relevant and trending hashtags, starting with #.",
+      "artisanStory": "A short, narrative paragraph about the artisan's craft based on their story."
     }}
     """
 

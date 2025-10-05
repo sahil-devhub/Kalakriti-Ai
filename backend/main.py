@@ -6,25 +6,26 @@ from io import BytesIO
 from flask import Flask, jsonify, send_file, request, send_from_directory, Response
 from flask_cors import CORS
 
-# Load environment variables FIRST (Recommended)
-# from dotenv import load_dotenv
-# load_dotenv()
-
 # We need the following imports to initialize Vertex AI/GenAI clients in service files
 import vertexai
 from services import marketing_copilot, brand_studio, audio_story
 
 # --- 1. FLASK APP INITIALIZATION ---
-# Configure Flask to serve the React 'build' directory
-# Assuming the React build will be located at `kalakriti-ai/frontend/build`
-app = Flask(__name__, 
-            static_folder='frontend/build/static',
-            template_folder='frontend/build')
+# Get the absolute path to the project root (KALAKRITI-AI)
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-# Since the frontend will be served by the same Flask instance (same origin), 
-# CORS is technically not required for the API endpoints, but we keep a generic CORS 
-# setup on the app just to be safe in dev mode.
-CORS(app) 
+app = Flask(__name__,
+            static_folder=os.path.join(project_root, 'frontend/build/static'),
+            template_folder=os.path.join(project_root, 'frontend/build'))
+
+# --- FINAL CORS CONFIGURATION FOR DEVELOPMENT ---
+# This is a more robust setup that explicitly handles methods, headers,
+# and credentials, which is often required for complex requests.
+CORS(app,
+     origins="http://localhost:3000",
+     methods=["GET", "POST", "OPTIONS"],
+     supports_credentials=True,
+     allow_headers=["Authorization", "Content-Type"])
 
 # Initialize Vertex AI (still required for the service modules)
 try:
@@ -119,3 +120,5 @@ def generate_audio_story_route():
 if __name__ == '__main__':
     # Flask will now serve both the frontend and API on http://127.0.0.1:5000
     app.run(host='127.0.0.1', port=5000, debug=True)
+
+
