@@ -1,11 +1,7 @@
 google-cloud-speech
-google-cloud-speech
-
 requests
-
 Server
 Flask
 Flask-Cors
-
 python-dotenv
 gunicorn
