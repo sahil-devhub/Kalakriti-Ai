@@ -11,7 +11,8 @@
 > **🏆 Project Contest Submission 2025**
 > *Bridging the gap between traditional craftsmanship and the global digital marketplace.*
 
-[📂 Drive Link to Project Docs](#) | [🎥 Watch Demo Video](#)
+[<a href="https://drive.google.com/drive/folders/1-K21IIZMkwJ08cV003WRTMx3dlJAAKDY?usp=sharing">📂 Drive Link to Project Docs]<a/>  | 
+<a href="https://kalakriti-ai.vercel.app/"> 👨‍💻 LIVE PROJECT VIEW</a>
 
 </div>
 
