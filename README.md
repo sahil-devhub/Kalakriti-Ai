@@ -41,7 +41,7 @@ Using **Google's Gemini 2.5 Multimodal AI**, the system analyzes the visual aest
 
 | **Signup & Validation** | **Success Feedback** | **Route Security** |
 |:---:|:---:|:---:|
-| <img src="screenshots/signup.png" width="100%" alt="Signup"> | <img src="screenshots/auth_success.png" width="100%" alt="Success"> | <img src="screenshots/security_alert.png" width="100%" alt="Security Alert"> |
+| <img src="screenshots/signup.png" width="100%" alt="Signup"> | <img src="screenshots/auth_success.png" width="100%" alt="Success"> | <img src="screenshots/security.png" width="100%" alt="Security Alert"> |
 | *Real-time form validation* | *Instant visual confirmation* | *Protected Route Guarding* |
 
 <br>
@@ -180,6 +180,6 @@ KalaKriti-Ai/
 ## 👨‍💻 Team Details
 Team Name: Tech Crafters
 ```
-Sahil Kumar (Roll No: 2201688) - Full Stack Developer & AI Integration
+Sahil Kumar (Roll No: 2201688) - Software Development & AI Integration
 ```
 Made with ❤️ for Indian Artisans.
