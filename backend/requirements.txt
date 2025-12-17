@@ -1,18 +1,12 @@
-# Google Cloud Services
-google-cloud-aiplatform
+Google Cloud Services
 google-cloud-speech
-google-generativeai
-google-cloud-storage
-google-cloud-vision
-pydub
-gunicorn
-# Serverless Framework for Google Cloud Functions
-functions-framework
+
+HTTP Requests
+requests
+
+Server
 Flask
 Flask-Cors
-# Audio Processing for Feature #3
-pydub
-# For loading our secret keys in local development
+
+Other utilities
 python-dotenv
-# For detecting file types
-filetype

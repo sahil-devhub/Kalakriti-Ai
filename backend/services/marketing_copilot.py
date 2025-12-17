@@ -1,98 +1,92 @@
-# --- FINAL OPTIMIZED PROMPT FOR ACCESSIBLE LANGUAGE AND SHORT DESCRIPTION ---
-import vertexai
-from google import genai
-from google.genai.types import Part, GenerateContentConfig, HarmCategory, HarmBlockThreshold
-from google.cloud import speech
+import base64
 import json
-import os
+import requests
+import re
 
-# Ensure environment variables are set
-if not os.getenv("GOOGLE_CLOUD_PROJECT"):
-    pass 
+def generate_full_kit(image_content: bytes, audio_content: bytes, platform: str, api_key: str) -> dict:
+    # 1. Prepare Image Data
+    image_part = {
+        "inline_data": {
+            "mime_type": "image/jpeg",
+            "data": base64.b64encode(image_content).decode('utf-8')
+        }
+    }
 
-def transcribe_audio(audio_content: bytes) -> str:
-    try:
-        client = speech.SpeechClient()
-        audio = speech.RecognitionAudio(content=audio_content)
-        config = speech.RecognitionConfig(
-            encoding=speech.RecognitionConfig.AudioEncoding.MP3,
-            sample_rate_hertz=16000,
-            language_code="pa-IN"
-        )
-        response = client.recognize(config=config, audio=audio)
-        if response.results and response.results[0].alternatives:
-            return response.results[0].alternatives[0].transcript
-        else:
-            return json.dumps({"error": "Could not transcribe audio from the provided file."})
-    except Exception as e:
-        print(f"DEBUG: Error in transcription: {e}")
-        return json.dumps({"error": f"Error during audio transcription. Check file format (MP3) and language (pa-IN)."})
+    # 2. Prepare Audio Data (audio/webm matches browser recording)
+    audio_part = {
+        "inline_data": {
+            "mime_type": "audio/webm", 
+            "data": base64.b64encode(audio_content).decode('utf-8')
+        }
+    }
 
-def generate_text_for_art(image_content: bytes, audio_content: bytes) -> str:
-    artisan_story_transcript = transcribe_audio(audio_content)
+    # 3. Define Platform Specifics
+    hashtag_instruction = "Generate 30 high-traffic, niche-specific, and viral hashtags."
+    if platform == 'instagram':
+        hashtag_instruction = "Generate exactly 30 mixed (broad & niche) viral hashtags."
 
-    try:
-        transcript_data = json.loads(artisan_story_transcript)
-        if "error" in transcript_data:
-            return json.dumps({"error": f"Transcription failed: {transcript_data['error']}"})
-    except (json.JSONDecodeError, TypeError):
-        pass
-
-    try:
-        client = genai.Client()
-    except Exception as e:
-        print(f"DEBUG: Error initializing Gen AI client: {e}")
-        return json.dumps({"error": "Failed to initialize AI client. Check authentication and project settings."})
-
-    if not image_content:
-        return json.dumps({"error": "Missing image file in request."})
-
-    image_part = Part.from_bytes(data=image_content, mime_type="image/jpeg")
-
-    # --- FINAL REFINED PROMPT FOR SIMPLE LANGUAGE, SHORT DESCRIPTION, AND MAX VISIBILITY ---
-    # --- [NEW SIMPLIFIED AND CORRECTED PROMPT] ---
+    # 4. Construct the Master Prompt
     text_prompt = f"""
-    You are an expert social media strategist for artisanal crafts. Your goal is to create a marketing kit from the attached product image and the artisan's story.
+    You are a world-class marketing copywriter.
 
-    **Artisan's Story Transcript:**
-    "{artisan_story_transcript}"
+    **Primary Goal:** Analyze the attached IMAGE and AUDIO (Artisan's Story) to create a viral social media kit for {platform}.
 
-    **Crucial Instructions:**
-    1.  **Language:** Use simple, easy-to-understand language.
-    2.  **Conciseness:** Keep all descriptions short and persuasive.
-    3.  **JSON Structure:** Respond ONLY with a valid JSON object using the exact keys specified below. Do not add ```json markdown.
+    **Instructions:**
+    1. Listen to the audio. Identify the language.
+    2. **Authenticity:** Use 2-3 powerful KEYWORDS from the story in *italics* with (translation).
+    3. **Accuracy:** Do not invent words.
 
-    **Your Response JSON Structure:**
+    **JSON Output Rules:**
+    - Respond ONLY with a valid JSON object.
+    - Structure:
     {{
-      "productTitle": "A concise, SEO-friendly title (5-8 words).",
-      "productDescription": "A persuasive product description for a sales page (3-4 sentences max).",
-      "mainPostDescription": "An engaging social media caption for the main post body, can include emojis (2-3 sentences).",
-      "hashtags": "A single string containing 10-15 relevant and trending hashtags, starting with #.",
-      "artisanStory": "A short, narrative paragraph about the artisan's craft based on their story."
+      "productTitle": "Short catchy title",
+      "productDescription": "Compelling description (70-90 words)",
+      "productHighlights": "Story highlights using native words",
+      "post": "Viral caption for {platform}. NO HASHTAGS HERE.",
+      "hashtags": "{hashtag_instruction} Space separated tags."
     }}
     """
 
+    parts = [
+        {"text": text_prompt},
+        image_part,
+        audio_part
+    ]
+
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=[image_part, text_prompt],
-            config=GenerateContentConfig(
-                safety_settings=[
-                    {
-                        "category": HarmCategory.HARM_CATEGORY_HARASSMENT,
-                        "threshold": HarmBlockThreshold.BLOCK_ONLY_HIGH
-                    },
-                    {
-                        "category": HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-                        "threshold": HarmBlockThreshold.BLOCK_ONLY_HIGH
-                    }
-                ]
-            )
-        )
-        if not response.text or not response.text.strip():
-            print(f"DEBUG: Empty response from Gemini: {response}")
-            return json.dumps({"error": "No content generated by AI model."})
-        return response.text
+        # --- FIX: Updated to 'gemini-2.5-flash' as requested ---
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        
+        payload = {
+            "contents": [{"parts": parts}],
+            "generationConfig": {
+                "temperature": 0.7,
+                "response_mime_type": "application/json"
+            }
+        }
+        headers = {'Content-Type': 'application/json'}
+        
+        response = requests.post(api_url, headers=headers, json=payload)
+        response.raise_for_status()
+        
+        response_json = response.json()
+
+        if 'candidates' not in response_json or not response_json['candidates']:
+            return {"error": "The AI model blocked the response (Safety Filter)."}
+
+        generated_content = response_json['candidates'][0]['content']['parts'][0]['text']
+        clean_json_str = generated_content.replace('```json', '').replace('```', '').strip()
+        
+        match = re.search(r'\{.*\}', clean_json_str, re.DOTALL)
+        if match:
+            clean_json_str = match.group(0)
+            
+        return json.loads(clean_json_str)
+
+    except requests.exceptions.HTTPError as e:
+        print(f"AI API ERROR: {e.response.text}") # Detailed error logging
+        return {"error": f"AI API Error: {e.response.status_code}"}
     except Exception as e:
-        print(f"DEBUG: Error generating content from Gemini: {e}")
-        return json.dumps({"error": "Failed to generate content from AI model. Check logs for details."})
+        print(f"AI ERROR DETAILS: {e}")
+        return {"error": f"AI Error: {str(e)}"}

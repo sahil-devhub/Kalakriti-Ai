@@ -1,19 +1,15 @@
-# --- FINAL UPGRADED LIVE AI VERSION ---
 import base64
 import json
-from google import genai
-from vertexai.preview.vision_models import ImageGenerationModel # We still use this for logo creation
+import requests
 
-def generate_brand_kit(image_contents: list[bytes]) -> str:
+def generate_brand_kit(image_contents: list[bytes], api_key: str) -> dict:
     """
-    Generates a brand kit using the new genai client.
+    Generates a brand kit and returns a clean dictionary.
     """
-    try:
-        client = genai.Client(project="kalakriti-ai", location="us-central1")
-    except Exception as e:
-        return json.dumps({"error": "Failed to initialize AI client."})
+    if not image_contents:
+        return {"error": "No images provided for brand analysis."}
 
-    image_parts = [{"mime_type": "image/jpeg", "data": content} for content in image_contents]
+    parts = [{"inline_data": {"mime_type": "image/jpeg", "data": base64.b64encode(content).decode('utf-8')}} for content in image_contents]
 
     text_prompt = """
     You are an expert brand designer for artisanal crafts. Analyze this collection of images.
@@ -26,29 +22,37 @@ def generate_brand_kit(image_contents: list[bytes]) -> str:
       "logoPrompt": "A detailed, descriptive prompt for an AI image generator to create a simple, elegant logo based on the art style."
     }
     """
+    parts.insert(0, {"text": text_prompt})
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=image_parts + [text_prompt],
-        )
-        strategy_json = json.loads(response.text)
+        api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+        
+        payload = {"contents": [{"parts": parts}]}
+        headers = {'Content-Type': 'application/json'}
+        
+        response = requests.post(api_url, headers=headers, json=payload)
+        response.raise_for_status()
+        
+        response_json = response.json()
+        strategy_text = response_json['candidates'][0]['content']['parts'][0]['text']
+        
+        # --- FIX: Clean the raw text before parsing ---
+        json_start = strategy_text.find('{')
+        json_end = strategy_text.rfind('}') + 1
+        clean_str = strategy_text[json_start:json_end]
+        strategy_json = json.loads(clean_str)
+        
         logo_prompt_from_gemini = strategy_json.get("logoPrompt")
-    except Exception as e:
-        print(f"Error with Gemini analysis: {e}")
-        return '{ "error": "Failed to generate brand strategy from Gemini." }'
-
-    try:
-        generation_model = ImageGenerationModel.from_pretrained("imagegeneration@005")
-        images = generation_model.generate_images(prompt=logo_prompt_from_gemini)
-        logo_image_bytes = images[0]._image_bytes
-        logo_base64 = base64.b64encode(logo_image_bytes).decode('utf-8')
-
         strategy_json["generatedLogo"] = {
             "promptUsed": logo_prompt_from_gemini,
-            "imageBase64": logo_base64
+            "imageBase64": None
         }
-        return json.dumps(strategy_json)
+        
+        return strategy_json
+
+    except requests.exceptions.HTTPError as e:
+        error_details = e.response.json()
+        error_message = error_details.get('error', {}).get('message', 'An unknown API error occurred.')
+        return {"error": f"AI API Error (Brand Kit): {error_message}"}
     except Exception as e:
-        print(f"Error with Imagen logo generation: {e}")
-        return '{ "error": "Failed to generate logo with Imagen." }'
+        return {"error": f"Failed to generate brand kit: {e}"}

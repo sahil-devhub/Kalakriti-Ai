@@ -1,42 +1,64 @@
-# --- FINAL LIVE AI VERSION ---
 from pydub import AudioSegment
 from io import BytesIO
+import os
+import math
 
-def create_audio_story(voice_content: bytes) -> bytes:
-    """
-    The main function for Feature #3. It acts as a mini audio engineer.
-    It takes the artisan's raw audio, mixes it with background music,
-    and returns a polished MP3 file.
+# CRITICAL FIX (A): EXPLICITLY SET FFMPEG AND FFPROBE PATHS
+# (These lines must be at the top of your audio_story.py file)
+AudioSegment.converter = "C:\\ffmpeg\\bin\\ffmpeg.exe"
+AudioSegment.R_PATH = "C:\\ffmpeg\\bin\\ffprobe.exe" 
 
-    Args:
-        voice_content: The binary content of the artisan's voice recording.
-    
-    Returns:
-        The binary content of the final, mixed MP3 file, or None on error.
-    """
+
+def create_audio_story(voice_content: bytes) -> bytes | str:
     try:
-        # Step 1: Load the audio files from memory
-        voice_recording = AudioSegment.from_file(BytesIO(voice_content))
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        music_path = os.path.join(base_dir, '..', 'assets', 'music.mp3')
+
+        voice_recording = None
         
-        # Load the background music from our assets folder
-        background_music = AudioSegment.from_mp3("backend/assets/music.mp3")
+        # CRITICAL FIX (B): Multi-Format Loading (NOW INCLUDES OPUS)
+        # We try the most common formats for browser-recorded audio.
+        for fmt in ["opus", "ogg", "wav", "mp3", "webm"]: 
+            try:
+                # Use a fresh BytesIO stream for each attempt
+                voice_recording = AudioSegment.from_file(BytesIO(voice_content), format=fmt)
+                print(f"Successfully loaded audio as format: {fmt}")
+                break  # Stop the loop immediately on success
+            except:
+                pass 
 
-        # Step 2: Prepare the mix
-        # Reduce the background music's volume by 10 dB to make it subtle
-        subtle_music = background_music - 10
+        if voice_recording is None:
+             raise ValueError(
+                 "Failed to load voice content. The audio format sent by the browser "
+                 "is not recognized (tried opus, ogg, wav, mp3, webm)."
+             )
 
-        # Step 3: Overlay the voice on top of the music
-        mixed_audio = subtle_music.overlay(voice_recording)
 
-        # Step 4: Normalize the final audio to a consistent volume
+        background_music = AudioSegment.from_mp3(music_path)
+
+        # --- Existing Mixing Logic ---
+        subtle_music = background_music - 12
+        voice_duration = len(voice_recording)
+        
+        if len(subtle_music) < voice_duration:
+            times_to_loop = math.ceil(voice_duration / len(subtle_music))
+            looped_music = subtle_music * times_to_loop
+            music_for_mix = looped_music[:voice_duration]
+        else:
+            music_for_mix = subtle_music[:voice_duration]
+
+        mixed_audio = music_for_mix.overlay(voice_recording)
         final_audio = mixed_audio.normalize()
-
-        # Step 5: Export the final audio to an in-memory buffer
         buffer = BytesIO()
         final_audio.export(buffer, format="mp3")
         
         return buffer.getvalue()
-
+        
     except Exception as e:
-        print(f"Error creating audio story: {e}")
-        return None
+        error_message = (
+            "Audio processing failed. This is almost always because FFmpeg is not installed "
+            "or not found in your system's PATH. Please ensure FFmpeg is correctly installed. "
+            f"Detailed Pydub Error: {e}"
+        )
+        print(f"--- DETAILED AUDIO STORY ERROR ---: {error_message}")
+        return error_message

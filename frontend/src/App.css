@@ -1,4 +1,4 @@
-/* --- Kalakriti AI: Complete Unified Stylesheet --- */
+/* --- Kalakriti AI: Final Cleaned Stylesheet --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 /* --- 1. Base & Body Styles --- */
@@ -7,19 +7,19 @@ body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0A0A1A; /* Deep Space Blue */
-  color: #E0E7FF; /* Light Lavender White */
+  background-color: #0A0A1A;
+  color: #E0E7FF;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center; /* Center content vertically */
+  justify-content: center;
   min-height: 100vh;
   padding: 2rem;
   position: relative;
-  overflow: hidden; /* Hide overflowing particles */
+  overflow: hidden;
   z-index: 1;
 }
 
@@ -40,7 +40,7 @@ body {
 }
 
 
-/* --- 2. Background Particle Animation (Your Existing Code) --- */
+/* --- 2. Background Particle Animation --- */
 .background-particles {
   position: fixed;
   top: 0;
@@ -57,7 +57,6 @@ body {
   opacity: 0.2;
   animation: float-and-pulse 20s infinite ease-in-out;
 }
-
 .particle:nth-child(1) { width: 50px; height: 50px; top: 10%; left: 15%; animation-duration: 25s; }
 .particle:nth-child(2) { width: 80px; height: 80px; top: 80%; left: 70%; animation-duration: 18s; animation-delay: 2s; }
 .particle:nth-child(3) { width: 60px; height: 60px; top: 50%; left: 40%; animation-duration: 22s; animation-delay: 4s; }
@@ -71,7 +70,7 @@ body {
 }
 
 
-/* --- 3. Common Styles (Logo, Buttons, etc.) --- */
+/* --- 3. Common Styles --- */
 .logo {
   font-size: 3rem;
   font-weight: 700;
@@ -82,7 +81,7 @@ body {
 
 .tagline {
   font-size: 1.1rem;
-  color: #a5b4fc; /* Lavender */
+  color: #a5b4fc;
   margin-bottom: 2.5rem;
   text-align: center;
 }
@@ -102,6 +101,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  box-sizing: border-box;
 }
 
 .create-button:hover:not(:disabled) {
@@ -124,16 +124,17 @@ body {
 }
 
 .error-message {
-  color: #f87171; /* Red */
+  color: #f87171;
   background-color: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.5);
-  padding: 0.8rem;
+  padding: 1rem;
   border-radius: 10px;
   margin-top: 1.5rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
   width: 100%;
-  max-width: 450px;
+  max-width: 900px;
   box-sizing: border-box;
+  text-align: center;
 }
 
 /* --- 4. Navigation Styles --- */
@@ -159,96 +160,14 @@ body {
 }
 
 
-/* --- 5. Signup Page Styles --- */
-.auth-card {
-  background-color: rgba(18, 18, 38, 0.5);
-  padding: 2.5rem;
-  border-radius: 20px;
-  border: 1px solid rgba(128, 90, 213, 0.4);
-  box-shadow: 0 0 30px rgba(236, 72, 153, 0.3), 0 0 20px rgba(139, 92, 246, 0.2);
-  max-width: 450px;
-  width: 100%;
-  text-align: center;
-}
-
-.auth-form {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  text-align: left;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
-  color: #c4b5fd; /* Light purple */
-}
-
-.input-with-icon {
-  position: relative;
-}
-
-.input-icon {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #8b5cf6; /* Main purple */
-}
-
-.auth-input {
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #1e1b4b; /* Dark indigo */
-  border: 1px solid #4f46e5; /* Indigo border */
-  border-radius: 10px;
-  padding: 0.8rem 0.8rem 0.8rem 2.5rem;
-  color: #e0e7ff;
-  font-size: 1rem;
-  transition: all 0.2s ease-in-out;
-}
-
-.auth-input::placeholder { color: #a5b4fc; }
-
-.auth-input:focus {
-  outline: none;
-  border-color: #ec4899; /* Pink focus */
-  box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
-}
-
-.success-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  background-color: rgba(18, 18, 38, 0.5);
-  padding: 3rem;
-  border-radius: 20px;
-  border: 1px solid #34d399; /* Green border */
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
-  max-width: 450px;
-}
-
-.success-icon {
-  font-size: 4rem;
-  color: #34d399;
-}
-
-
-/* --- 6. Home Page Styles --- */
+/* --- 5. Main Page Content Styles --- */
 .upload-section {
   display: flex;
   gap: 2rem;
   width: 100%;
   max-width: 900px;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; /* Adjusted margin */
 }
 
 .upload-card {
@@ -312,14 +231,292 @@ input[type="file"] {
   color: #34d399;
 }
 
+.api-key-section {
+  background-color: rgba(26, 32, 44, 0.7);
+  padding: 20px 25px;
+  border-radius: 12px;
+  margin-bottom: 2rem; /* Adjusted margin */
+  border: 1px solid rgba(128, 90, 213, 0.2);
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+.api-key-section h3 {
+  margin-top: 0;
+  text-align: left;
+  color: #a0aec0;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.api-key-icon {
+  position: absolute;
+  left: 15px;
+  color: #6b7280;
+}
+
+.api-key-input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border-radius: 8px;
+  border: 1px solid #4a5568;
+  background-color: #1a202c;
+  color: #e2e8f0;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.api-key-input:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+.platform-selector { /* Reverted to single platform selector */
+  background-color: rgba(26, 32, 44, 0.7);
+  padding: 20px 25px;
+  border-radius: 12px;
+  margin-bottom: 2rem; /* Adjusted margin */
+  border: 1px solid rgba(128, 90, 213, 0.2);
+  width: 100%;
+  max-width: 900px;
+  box-sizing: border-box;
+}
+
+.platform-selector h3 {
+  margin-top: 0;
+  text-align: left;
+  color: #a0aec0;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.platform-btn-group {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.platform-btn {
+  background-color: #374151;
+  color: #d1d5db;
+  border: 1px solid #4b5563;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.platform-btn:hover {
+  background-color: #4b5563;
+  color: #fff;
+}
+
+.platform-btn.active {
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+  transform: scale(1.05);
+}
+
+
+/* --- 6. Results Display Styles --- */
 .result-container {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   background-color: rgba(18, 18, 38, 0.5);
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 20px;
   border: 1px solid rgba(128, 90, 213, 0.4);
   width: 100%;
   max-width: 900px;
   text-align: left;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+  box-sizing: border-box;
 }
 
+.result-title {
+  margin-top: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  border-bottom: 2px solid #8b5cf6;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.result-item {
+  margin-bottom: 1.5rem;
+}
+
+.result-item h3 {
+  color: #a5b4fc;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.result-item p {
+  color: #e0e7ff;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.hashtags {
+  color: #8b5cf6 !important;
+  font-style: italic;
+  word-spacing: 0.5rem;
+  overflow-wrap: break-word; /* Ensure hashtags wrap correctly */
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 1.5rem;
+  border-top: 1px solid #4a5568;
+  padding-top: 1.5rem;
+}
+
+.action-btn {
+  background-color: #4f46e5;
+  color: #e2e8f0;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+  background-color: #6366f1;
+}
+
+/* --- Audio Recording Button Styles --- */
+.record-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.record-btn.start {
+  background-color: #4f46e5;
+}
+.record-btn.start:hover {
+  background-color: #6366f1;
+}
+
+.record-btn.stop {
+  background-color: #ef4444;
+  animation: pulse 1.s infinite;
+}
+.record-btn.stop:hover {
+  background-color: #f87171;
+}
+
+.record-btn.delete {
+  background-color: #dc2626;
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+  white-space: nowrap;
+}
+.record-btn.delete:hover {
+  background-color: #ef4444;
+}
+
+.recording-complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.audio-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.audio-controls audio {
+  width: calc(100% - 80px);
+  max-width: 200px;
+  height: 30px;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* --- Styles for Language Selector --- */
+.language-selector-section {
+  background-color: rgba(18, 18, 38, 0.5);
+  padding: 1.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(128, 90, 213, 0.4);
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.language-dropdown {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #4a5568;
+  background-color: #1a202c;
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}
+
+.language-dropdown:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+}
+
+/* --- Styles for Audio Mixing Indicator --- */
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: #a5b4fc;
+}

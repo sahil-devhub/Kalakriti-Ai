@@ -258,3 +258,29 @@ input[type="file"] {
     padding: 0.75rem;
   }
 }
+
+/* --- New Styles for Immediate Upload Preview --- */
+.upload-preview-container {
+  margin-top: 1rem; 
+  width: 120px;       /* Fixed thumbnail width */
+  height: 120px;      /* Fixed thumbnail height */
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #8b5cf6; /* Purple border to match theme */
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  background-color: #000;
+  align-self: center; /* Centers the image inside the card */
+  animation: fade-in 0.5s ease-out;
+}
+
+.upload-preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image fills the square cleanly */
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
