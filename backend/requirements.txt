@@ -1,4 +1,4 @@
-Google Cloud Services
+google-cloud-speech
 google-cloud-speech
 
 HTTP Requests
