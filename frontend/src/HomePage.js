@@ -98,7 +98,7 @@ function HomePage() {
       formData.append('audio', audioBlob, 'story.webm');
       formData.append('platform', activePlatform);
 
-      const apiResponse = await fetch('http://127.0.0.1:5000/api/generate-kit', {
+      const apiResponse = await fetch('https://kalakriti-ai-3ivj.onrender.com/generate-kit', {
         method: 'POST',
         body: formData,
       });
