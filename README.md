@@ -59,7 +59,7 @@ Using **Google's Gemini 2.5 Multimodal AI**, the system analyzes the visual aest
 **Step B: Platform Optimization**
 *User selects the target social media platform to tailor the hashtag strategy.*
 <div align="center">
-  <img src="screenshots/platform_select.png" width="60%" alt="Platform Selection" style="border-radius: 8px;">
+  <img src="screenshots/platform.png" width="60%" alt="Platform Selection" style="border-radius: 8px;">
 </div>
 
 <br>
@@ -75,7 +75,7 @@ Using **Google's Gemini 2.5 Multimodal AI**, the system analyzes the visual aest
 ### 5. Backend Database
 *We utilized **Google Firebase** for our database needs.*
 <div align="center">
-  <img src="screenshots/firebase_db.png" width="90%" alt="Firebase Database" style="border-radius: 10px; border: 1px solid #333;">
+  <img src="screenshots/firebase.png" width="90%" alt="Firebase Database" style="border-radius: 10px; border: 1px solid #333;">
 </div>
 
 > **Why Firebase?** > We chose Firebase Authentication and Firestore because it offers **enterprise-grade security** for handling user credentials (email/password) without managing complex server-side sessions. It also provides real-time data synchronization, ensuring the user state is instantly updated across the app.
