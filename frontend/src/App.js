@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './HomePage';
 import SignupPage from './SignupPage';
 import LoginPage from './LoginPage'; // <--- 1. Import the new page
+import ForgotPassword from './ForgotPassword'; // <--- 1. Import this
 import './App.css';
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/login" element={<LoginPage />} />       {/* <--- 3. Add Login Route */}
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </div>
     </Router>
