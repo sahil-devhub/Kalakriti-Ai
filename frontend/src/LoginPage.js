@@ -1,116 +1,140 @@
-/* src/LoginPage.css */
+// src/LoginPage.js
+import React, { useState } from 'react';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Link, useNavigate } from 'react-router-dom';
+import './LoginPage.css';
+import PageLoader from './PageLoader';
 
-/* Center the card on the page */
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-top: 2rem;
-  animation: fadeIn 0.8s ease-out;
-}
+const LoginPage = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // 1. New State for Password Visibility
+    const [showPassword, setShowPassword] = useState(false);
+    
+    const navigate = useNavigate();
 
-/* The Glass Card Design */
-.login-card {
-  background: rgba(10, 10, 26, 0.6); /* Semi-transparent dark background */
-  backdrop-filter: blur(12px);         /* Blur effect behind the card */
-  padding: 3rem;
-  border-radius: 20px;
-  border: 1px solid rgba(139, 92, 246, 0.3); /* Thin purple border */
-  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15), /* Outer glow */
-              inset 0 0 20px rgba(139, 92, 246, 0.05); /* Inner glow */
-  width: 100%;
-  max-width: 420px;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError(''); 
+        setIsLoading(true);
 
-/* Optional: Top glow line */
-.login-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, transparent);
-}
+        const auth = getAuth();
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+            
+            setTimeout(() => {
+                 navigate('/'); 
+            }, 2000);
 
-.login-title {
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-}
+        } catch (error) {
+            setIsLoading(false);
+            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                setError('Invalid email or password.');
+            } else if (error.code === 'auth/wrong-password') {
+                setError('Incorrect password.');
+            } else {
+                setError(error.message);
+            }
+        }
+    };
 
-.login-subtitle {
-  color: #a5b4fc;
-  text-align: center;
-  margin-bottom: 2.5rem;
-  font-size: 0.95rem;
-}
+    return (
+        <>
+            {isLoading && <PageLoader />}
 
-/* Form Styles */
-.form-group {
-  margin-bottom: 1.5rem;
-}
+            <div className="login-container"> 
+                <div className="login-card">
+                    <h2 className="login-title">Welcome Back</h2>
+                    <p className="login-subtitle">Login to continue creating your marketing kits.</p>
+                    
+                    <form onSubmit={handleLogin}>
+                        <div className="form-group">
+                            <label className="form-label">Email Address</label>
+                            <input
+                                type="email"
+                                className="form-input"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                required
+                                disabled={isLoading} 
+                            />
+                        </div>
 
-.form-label {
-  display: block;
-  color: #e0e7ff;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
+                        <div className="form-group">
+                            <label className="form-label">Password</label>
+                            
+                            {/* 2. Wrapper for Input + Eye Icon */}
+                            <div style={{ position: 'relative' }}>
+                                <input
+                                    // 3. Dynamic Type: Text or Password
+                                    type={showPassword ? "text" : "password"}
+                                    className="form-input"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Enter your password"
+                                    required
+                                    disabled={isLoading}
+                                    style={{ paddingRight: '40px' }} // Make room for the icon
+                                />
+                                
+                                {/* 4. The Eye Icon Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                        color: '#a5b4fc', // Matches your theme color
+                                        display: 'flex',
+                                        alignItems: 'center'
+                                    }}
+                                >
+                                    {showPassword ? (
+                                        // Eye Open Icon (SVG)
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                            <circle cx="12" cy="12" r="3"></circle>
+                                        </svg>
+                                    ) : (
+                                        // Eye Off Icon (SVG)
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    )}
+                                </button>
+                            </div>
 
-.form-input {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(139, 92, 246, 0.2);
-  border-radius: 10px;
-  color: #fff;
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.3s ease;
-  box-sizing: border-box; /* Ensures padding doesn't break width */
-}
+                            <div style={{textAlign: 'right', marginTop: '8px'}}>
+                                <Link to="/forgot-password" style={{color: '#c084fc', fontSize: '0.85rem', textDecoration: 'none'}}>
+                                    Forgot Password?
+                                </Link>
+                            </div>
+                        </div>
 
-.form-input:focus {
-  border-color: #8b5cf6;
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
-}
+                        {error && <p style={{color: '#ff4444', textAlign: 'center', marginBottom: '1rem'}}>{error}</p>}
 
-.form-input::placeholder {
-  color: #6b7280;
-}
+                        <button type="submit" className="submit-btn" disabled={isLoading}>
+                            {isLoading ? 'Signing In...' : 'Login'}
+                        </button>
+                    </form>
 
-/* Button Style */
-.submit-btn {
-  width: 100%;
-  padding: 1rem;
-  margin-top: 1rem;
-  background: linear-gradient(90deg, #ec4899, #8b5cf6);
-  border: none;
-  border-radius: 50px;
-  color: white;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
-}
+                    <p style={{marginTop: '20px', textAlign: 'center', color: '#94a3b8'}}>
+                        Don't have an account? <Link to="/signup" style={{color: '#c084fc', fontWeight: 'bold', textDecoration: 'none'}}>Sign Up</Link>
+                    </p>
+                </div>
+            </div>
+        </>
+    );
+};
 
-.submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+export default LoginPage;
