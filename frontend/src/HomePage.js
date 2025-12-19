@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import app from './firebaseConfig';
 import { 
   FaPaintBrush, FaCheckCircle, FaSpinner, FaDownload, FaCopy, 
-  FaLinkedin, FaGithub, FaEnvelope, FaGlobe, FaCamera, FaTimes 
+  FaLinkedin, FaGithub, FaEnvelope, FaGlobe, FaCamera, FaTimes, FaTrash // <--- Added FaTrash
 } from 'react-icons/fa';
 import AudioRecorder from './AudioRecorder';
 import ReactMarkdown from 'react-markdown';
@@ -89,7 +89,6 @@ function HomePage() {
     setIsAnimating(true);
   }, []);
 
-  // Clean up stream when component unmounts
   useEffect(() => {
       return () => {
           if (stream) {
@@ -98,7 +97,6 @@ function HomePage() {
       };
   }, [stream]);
 
-  // Scroll Animation Logic
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -118,7 +116,18 @@ function HomePage() {
     if (e.target.files && e.target.files[0]) {
       setArtFile(e.target.files[0]);
       artFileRef.current = e.target.files[0];
-      closeCamera(); // Ensure camera is off
+      closeCamera();
+    }
+  };
+
+  // --- NEW: HANDLE REMOVE IMAGE ---
+  const handleRemoveImage = () => {
+    setArtFile(null);
+    artFileRef.current = null;
+    // Reset the actual file input value so user can select same file again if they want
+    const fileInput = document.getElementById('art-upload');
+    if (fileInput) {
+        fileInput.value = "";
     }
   };
 
@@ -126,7 +135,6 @@ function HomePage() {
   const startCamera = async () => {
     setShowCamera(true);
     try {
-        // Try getting the environment (back) camera first
         const mediaStream = await navigator.mediaDevices.getUserMedia({ 
             video: { facingMode: 'environment' } 
         });
@@ -137,7 +145,6 @@ function HomePage() {
     } catch (err) {
         console.log("Back camera failed, trying front camera...", err);
         try {
-            // Fallback to any available camera (Laptop/Front)
             const fallbackStream = await navigator.mediaDevices.getUserMedia({ video: true });
             setStream(fallbackStream);
             if (videoRef.current) {
@@ -162,19 +169,12 @@ function HomePage() {
     if (videoRef.current && canvasRef.current) {
         const video = videoRef.current;
         const canvas = canvasRef.current;
-        
-        // Match canvas size to video size
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        
-        // Draw the current video frame to canvas
         const ctx = canvas.getContext('2d');
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        
-        // Convert to file
         const imageSrc = canvas.toDataURL('image/jpeg');
         const file = dataURLtoFile(imageSrc, "captured_photo.jpg");
-        
         setArtFile(file);
         artFileRef.current = file;
         closeCamera();
@@ -241,16 +241,15 @@ function HomePage() {
         <div className="upload-card">
             <div className="icon-container"><FaPaintBrush className="upload-icon" /><span>1. Upload Your Art</span></div>
             
-            {/* --- NATIVE CAMERA LOGIC --- */}
             {!showCamera ? (
                 <>
+                    {/* Buttons Row */}
                     <div style={{display: 'flex', gap: '10px', justifyContent: 'center', marginTop: '10px'}}>
                         <label htmlFor="art-upload" className="custom-file-upload">
                            Choose File
                         </label>
                         <input id="art-upload" type="file" onChange={handleArtUpload} accept="image/*" />
                         
-                        {/* CAMERA BUTTON */}
                         <button 
                             className="custom-file-upload" 
                             style={{background: 'linear-gradient(45deg, #ec4899, #8b5cf6)', border: 'none'}}
@@ -264,15 +263,42 @@ function HomePage() {
                         {artFile ? <><FaCheckCircle className="check-icon" /> {artFile.name}</> : 'No file chosen'}
                     </span>
 
-                    {/* PREVIEW IMAGE */}
+                    {/* PREVIEW IMAGE WITH DELETE BUTTON */}
                     {artFile && (
-                        <div className="upload-preview-container">
+                        <div className="upload-preview-container" style={{position: 'relative', display: 'inline-block', maxWidth: '100%'}}>
                             <img src={URL.createObjectURL(artFile)} alt="Art Preview" className="upload-preview-image" />
+                            
+                            {/* --- THE DELETE BUTTON --- */}
+                            <button 
+                                onClick={handleRemoveImage}
+                                style={{
+                                    position: 'absolute',
+                                    top: '10px',
+                                    right: '10px',
+                                    background: 'rgba(220, 38, 38, 0.9)', // Red color
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '50%',
+                                    width: '35px',
+                                    height: '35px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    cursor: 'pointer',
+                                    boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+                                    transition: 'transform 0.2s',
+                                }}
+                                title="Remove Image"
+                                onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                <FaTrash size={14} />
+                            </button>
                         </div>
                     )}
                 </>
             ) : (
-                /* --- NATIVE VIDEO ELEMENT (NO LIBRARY) --- */
+                /* CAMERA VIEW */
                 <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '100%'}}>
                     <div style={{
                         borderRadius: '12px', 
@@ -283,7 +309,6 @@ function HomePage() {
                         maxWidth: '400px',
                         background: '#000'
                     }}>
-                        {/* THE HTML5 VIDEO TAG */}
                         <video 
                             ref={videoRef} 
                             autoPlay 
@@ -342,9 +367,8 @@ function HomePage() {
         />
       )}
 
-      {/* --- PROFESSIONAL NARRATIVE SECTION (KEPT INTACT) --- */}
+      {/* --- PROFESSIONAL NARRATIVE SECTION --- */}
       <div className="pro-landing-wrapper">
-        
         <div className="mission-banner animate-on-scroll">
           <h2 className="mission-title">What is Kalakriti AI?</h2>
           <p className="mission-text">
@@ -418,7 +442,7 @@ function HomePage() {
       </div>
 
       <footer className="standard-footer animate-on-scroll">
-        <p>© 2025 Kalakriti AI, Designed & Developed by Sahil.</p>
+        <p>Designed & Developed by Sahil © 2025</p>
       </footer>
     </div>
   );
