@@ -16,6 +16,10 @@ app = Flask(__name__,
 
 CORS(app)
 
+@app.route('/health')
+def health_check():
+    return "Backend is active and running!", 200
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
