@@ -301,13 +301,15 @@ input[type="file"] {
   margin-bottom: 1rem;
 }
 
+/* Container for the buttons */
 .platform-btn-group {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center; /* <--- CHANGED: This centers the buttons in the box */
   flex-wrap: wrap;
   gap: 1rem;
 }
 
+/* The buttons themselves */
 .platform-btn {
   background-color: #374151;
   color: #d1d5db;
@@ -318,6 +320,12 @@ input[type="file"] {
   font-size: 1rem;
   font-weight: 600;
   transition: all 0.2s ease-in-out;
+
+  display: flex;             /* Forces flex layout inside the button */
+  justify-content: center;   /* Centers text horizontally */
+  align-items: center;       /* Centers text vertically */
+  text-align: center;        /* Extra safety for text */
+  min-width: 100px;          /* Ensures small buttons don't look squished */
 }
 
 .platform-btn:hover {
