@@ -1,8 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-// --- FIX: Corrected the import paths to match your file structure ---
 import HomePage from './HomePage';
 import SignupPage from './SignupPage';
-// --------------------------------------------------------------------
+import LoginPage from './LoginPage'; // <--- 1. Import the new page
 import './App.css';
 
 function App() {
@@ -20,12 +19,14 @@ function App() {
 
         <nav className="main-nav">
           <Link to="/" className="nav-link">Home</Link>
+          <Link to="/login" className="nav-link">Login</Link>   {/* <--- 2. Add Login Link */}
           <Link to="/signup" className="nav-link">Sign Up</Link>
         </nav>
         
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<LoginPage />} />       {/* <--- 3. Add Login Route */}
         </Routes>
       </div>
     </Router>
@@ -33,4 +34,3 @@ function App() {
 }
 
 export default App;
-
