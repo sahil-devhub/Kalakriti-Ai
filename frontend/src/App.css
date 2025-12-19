@@ -527,15 +527,18 @@ input[type="file"] {
 .pro-landing-wrapper {
   width: 100%;
   max-width: 1200px;
-  margin: 8rem auto 0; /* Big space from the main app */
-  padding: 0 2rem;
+  margin: 8rem auto 0;
+  padding: 0; /* REMOVED extra padding to fix alignment */
   display: flex;
   flex-direction: column;
-  gap: 6rem; /* Space between major sections */
+  gap: 6rem;
+  align-items: center; /* Forces everything to dead center */
+  box-sizing: border-box;
 }
 
-/* --- SECTION 1: WHAT IS IT? (The Mission Banner) --- */
+/* --- SECTION 1: MISSION BANNER --- */
 .mission-banner {
+  width: 100%; /* Fills the container perfectly */
   background: linear-gradient(135deg, rgba(20, 20, 35, 0.9), rgba(40, 40, 70, 0.8));
   border: 1px solid rgba(139, 92, 246, 0.2);
   border-radius: 30px;
@@ -544,6 +547,7 @@ input[type="file"] {
   position: relative;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box; /* Ensures padding doesn't break width */
 }
 
 /* Subtle background glow effect */
