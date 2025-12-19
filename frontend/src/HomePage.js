@@ -2,10 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import app from './firebaseConfig';
 import { 
-  FaPaintBrush, FaCheckCircle, FaSpinner, FaDownload, FaCopy
+  FaPaintBrush, FaCheckCircle, FaSpinner, FaDownload, FaCopy, 
+  FaLinkedin, FaGithub, FaEnvelope, FaGlobe // Import icons for buttons
 } from 'react-icons/fa';
 import AudioRecorder from './AudioRecorder';
 import ReactMarkdown from 'react-markdown';
+import './App.css';
 
 const AVAILABLE_PLATFORMS = [
   { id: 'instagram', name: 'Instagram' },
@@ -58,9 +60,7 @@ function HomePage() {
   const artFileRef = useRef(null); 
   const [isAnimating, setIsAnimating] = useState(false);
   const [activePlatform, setActivePlatform] = useState('instagram'); 
-  
   const [audioBlob, setAudioBlob] = useState(null);
-
   const auth = getAuth(app);
 
   useEffect(() => {
@@ -71,6 +71,25 @@ function HomePage() {
   useEffect(() => {
     setIsAnimating(true);
   }, []);
+
+  // --- NEW: SCROLL ANIMATION LOGIC ---
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    });
+
+    const hiddenElements = document.querySelectorAll('.animate-on-scroll');
+    hiddenElements.forEach((el) => observer.observe(el));
+
+    return () => {
+      hiddenElements.forEach((el) => observer.unobserve(el));
+    };
+  }, []); // Run once on mount
+  // -----------------------------------
 
   const handleArtUpload = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -142,13 +161,11 @@ function HomePage() {
             <input id="art-upload" type="file" onChange={handleArtUpload} accept="image/*" />
             <span className="file-name">{artFile ? <><FaCheckCircle className="check-icon" /> {artFile.name}</> : 'No file chosen'}</span>
             
-            {/* --- NEW PREVIEW SECTION START --- */}
             {artFile && (
               <div className="upload-preview-container">
                   <img src={URL.createObjectURL(artFile)} alt="Art Preview" className="upload-preview-image" />
               </div>
             )}
-            {/* --- NEW PREVIEW SECTION END --- */}
         </div>
         
         <AudioRecorder onRecordingComplete={setAudioBlob} />
@@ -180,6 +197,87 @@ function HomePage() {
           handleDownloadImage={handleDownloadImage}
         />
       )}
+
+      {/* --- NEW PROFESSIONAL NARRATIVE SECTION --- */}
+      
+      <div className="pro-landing-wrapper">
+
+        {/* 1. WHAT IS KALAKRITI AI? */}
+        <div className="mission-banner animate-on-scroll">
+          <h2 className="mission-title">What is Kalakriti AI?</h2>
+          <p className="mission-text">
+            Creators are masters of their craft, but often struggle to tell their story digitally. 
+            Existing tools are generic and robotic.
+            <br /><br />
+            <span className="highlight">Kalakriti AI bridges this gap.</span> We solved the problem of generic marketing 
+            by building an AI that listens to your voice, understands cultural context and emotion, 
+            and instantly generates professional, platform-specific marketing kits that feel authentically human.
+          </p>
+        </div>
+
+        {/* 2. HOW TO USE IT */}
+        <div>
+          <h2 className="section-heading-center animate-on-scroll">How It Works</h2>
+          <div className="steps-horizontal">
+            <div className="step-sticker animate-on-scroll" style={{transitionDelay: '100ms'}}>
+              <span className="step-number">1</span>
+              <span className="step-icon-sticker">🖼️</span>
+              <h3>Upload Visuals</h3>
+              <p>Select the product or artwork you want to showcase to the world.</p>
+            </div>
+            <div className="step-sticker animate-on-scroll" style={{transitionDelay: '200ms'}}>
+              <span className="step-number">2</span>
+              <span className="step-icon-sticker">🎙️</span>
+              <h3>Record Story</h3>
+              <p>Speak naturally in your language. Explain the inspiration and effort behind it.</p>
+            </div>
+            <div className="step-sticker animate-on-scroll" style={{transitionDelay: '300ms'}}>
+              <span className="step-number">3</span>
+              <span className="step-icon-sticker">🚀</span>
+              <h3>Launch Kit</h3>
+              <p>Get instant, tailored captions and hashtags ready for social media.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* 3. WHO DEVELOPED IT (UPDATED DESIGN) */}
+        <div>
+           <h2 className="section-heading-center animate-on-scroll">Meet the Creator</h2>
+           <div className="creator-block animate-on-scroll">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" 
+              alt="Sahil" 
+              className="creator-photo" 
+            />
+            <h3 className="creator-name">Sahil</h3>
+            <span className="creator-title">Software Development & AI Engineer</span>
+            
+            {/* UPDATED BUTTONS - ALL UNIFORM */}
+            <div className="creator-links">
+              <a href="https://sahil-devhub.github.io/Sahil.Dev/" target="_blank" rel="noreferrer" className="link-btn">
+                <FaGlobe size={20} /> Portfolio
+              </a>
+              <a href="https://www.linkedin.com/in/sahil-kumar-33298a292/" target="_blank" rel="noreferrer" className="link-btn">
+                <FaLinkedin size={20} /> LinkedIn
+              </a>
+              <a href="https://github.com/sahil-devhub" target="_blank" rel="noreferrer" className="link-btn">
+                <FaGithub size={20} /> GitHub
+              </a>
+              <a href="mailto:sk3458162@gmail.com" className="link-btn">
+                <FaEnvelope size={20} /> Contact
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      {/* 4. FOOTER */}
+      <footer className="standard-footer animate-on-scroll">
+        <p>© 2025 Kalakriti AI. Built with React, Python & Gemini API.</p>
+      </footer>
+
     </div>
   );
 }
