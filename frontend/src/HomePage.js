@@ -275,7 +275,7 @@ function HomePage() {
 
       {/* 4. FOOTER */}
       <footer className="standard-footer animate-on-scroll">
-        <p>© 2025 Kalakriti AI. Built with React, Python & Gemini API.</p>
+        <p>© 2025 Kalakriti AI, Designed & Developed by Sahil.</p>
       </footer>
 
     </div>
