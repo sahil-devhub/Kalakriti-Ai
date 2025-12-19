@@ -1,99 +1,116 @@
-// src/LoginPage.js
-import React, { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Link, useNavigate } from 'react-router-dom';
-import './LoginPage.css';
-// 1. Import the new Loader component
-import PageLoader from './PageLoader';
+/* src/LoginPage.css */
 
-const LoginPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    // 2. Add state to track if loading is happening
-    const [isLoading, setIsLoading] = useState(false); 
-    const navigate = useNavigate();
+/* Center the card on the page */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
+  animation: fadeIn 0.8s ease-out;
+}
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setError(''); // Clear previous errors
-        // 3. Start the loading animation immediately when button is clicked
-        setIsLoading(true);
+/* The Glass Card Design */
+.login-card {
+  background: rgba(10, 10, 26, 0.6); /* Semi-transparent dark background */
+  backdrop-filter: blur(12px);         /* Blur effect behind the card */
+  padding: 3rem;
+  border-radius: 20px;
+  border: 1px solid rgba(139, 92, 246, 0.3); /* Thin purple border */
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.15), /* Outer glow */
+              inset 0 0 20px rgba(139, 92, 246, 0.05); /* Inner glow */
+  width: 100%;
+  max-width: 420px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
 
-        const auth = getAuth();
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            
-            // 4. Login successful! Wait 2 seconds to show off the animation before redirecting.
-            setTimeout(() => {
-                 navigate('/'); 
-            }, 2000);
+/* Optional: Top glow line */
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ec4899, #8b5cf6, transparent);
+}
 
-        } catch (error) {
-            // 5. If there is an error, stop loading immediately so they can try again
-            setIsLoading(false);
+.login-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
 
-            if (error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
-                setError('Invalid email or password.');
-            } else if (error.code === 'auth/wrong-password') {
-                setError('Incorrect password.');
-            } else {
-                setError(error.message);
-            }
-        }
-    };
+.login-subtitle {
+  color: #a5b4fc;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-size: 0.95rem;
+}
 
-    return (
-        <>
-            {/* 6. Conditionally show the loader IF isLoading is true */}
-            {isLoading && <PageLoader />}
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.5rem;
+}
 
-            <div className="login-container"> 
-                <div className="login-card">
-                    <h2 className="login-title">Welcome Back</h2>
-                    <p className="login-subtitle">Login to continue creating your marketing kits.</p>
-                    
-                    <form onSubmit={handleLogin}>
-                        <div className="form-group">
-                            <label className="form-label">Email Address</label>
-                            <input
-                                type="email"
-                                className="form-input"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
-                                required
-                                disabled={isLoading} // Disable input while loading
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label className="form-label">Password</label>
-                            <input
-                                type="password"
-                                className="form-input"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
-                                required
-                                disabled={isLoading} // Disable input while loading
-                            />
-                        </div>
+.form-label {
+  display: block;
+  color: #e0e7ff;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
 
-                        {error && <p style={{color: '#ff4444', textAlign: 'center', marginBottom: '1rem'}}>{error}</p>}
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Ensures padding doesn't break width */
+}
 
-                        <button type="submit" className="submit-btn" disabled={isLoading}>
-                            {/* Change button text while loading */}
-                            {isLoading ? 'Signing In...' : 'Login'}
-                        </button>
-                    </form>
+.form-input:focus {
+  border-color: #8b5cf6;
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
 
-                    <p style={{marginTop: '20px', textAlign: 'center', color: '#94a3b8'}}>
-                        Don't have an account? <Link to="/signup" style={{color: '#c084fc', fontWeight: 'bold', textDecoration: 'none'}}>Sign Up</Link>
-                    </p>
-                </div>
-            </div>
-        </>
-    );
-};
+.form-input::placeholder {
+  color: #6b7280;
+}
 
-export default LoginPage;
+/* Button Style */
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  border: none;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
