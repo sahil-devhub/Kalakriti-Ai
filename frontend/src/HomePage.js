@@ -414,10 +414,10 @@ function HomePage() {
               className="creator-photo" 
             />
             <h3 className="creator-name">Sahil</h3>
-            <span className="creator-title">Full Stack Developer & AI Engineer</span>
+            <span className="creator-title">Software Developer & AI Engineer</span>
             
             <div className="creator-links">
-              <a href="https://your-portfolio-site.com" target="_blank" rel="noreferrer" className="link-btn">
+              <a href="https://sahil-devhub.github.io/Sahil.Dev/" target="_blank" rel="noreferrer" className="link-btn">
                 <FaGlobe size={20} /> Portfolio
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="link-btn">
